@@ -16,7 +16,7 @@
 	import Movietrouble from "./pages/movietrouble/Movietrouble.svelte";
 	import Seriestrouble from "./pages/seriestrouble/Seriestrouble.svelte";
 	import Providerslot from "./pages/providerslot/Providerslot.svelte";
-	import Domain from "./pages/domain/Domain.svelte";
+	import Currency from "./pages/currency/Currency.svelte";
 	import Banner from "./pages/banner/Banner.svelte";
 	import Album from "./pages/album/Album.svelte";
 	import Crm from "./pages/crm/Crm.svelte";
@@ -164,8 +164,8 @@
 					table_body_font: table_body_font,
 				},
 			}),
-			"/domain": wrap({
-				component: Domain,
+			"/currency": wrap({
+				component: Currency,
 				props: {
 					table_header_font: table_header_font,
 					table_body_font: table_body_font,

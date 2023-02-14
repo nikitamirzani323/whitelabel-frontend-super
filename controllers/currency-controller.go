@@ -10,7 +10,7 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
-func Domainhome(c *fiber.Ctx) error {
+func Currencyhome(c *fiber.Ctx) error {
 	hostname := c.Hostname()
 	bearToken := c.Get("Authorization")
 	token := strings.Split(bearToken, " ")
@@ -24,7 +24,6 @@ func Domainhome(c *fiber.Ctx) error {
 		})
 	}
 
-	log.Println("Hostname: ", hostname)
 	render_page := time.Now()
 	axios := resty.New()
 	resp, err := axios.R().
@@ -36,7 +35,7 @@ func Domainhome(c *fiber.Ctx) error {
 			"client_hostname": hostname,
 			"page":            client.Page,
 		}).
-		Post(PATH + "api/domain")
+		Post(PATH + "api/curr")
 	if err != nil {
 		log.Println(err.Error())
 	}
@@ -66,18 +65,17 @@ func Domainhome(c *fiber.Ctx) error {
 		})
 	}
 }
-func DomainSave(c *fiber.Ctx) error {
-	type payload_domainsave struct {
+func CurrencySave(c *fiber.Ctx) error {
+	type payload_currsave struct {
 		Page          string `json:"page"`
 		Sdata         string `json:"sdata" `
-		Domain_id     int    `json:"domain_id"`
-		Domain_name   string `json:"domain_name" `
-		Domain_status string `json:"domain_status" `
+		Currency_id   string `json:"currency_id"`
+		Currency_name string `json:"currency_name" `
 	}
 	hostname := c.Hostname()
 	bearToken := c.Get("Authorization")
 	token := strings.Split(bearToken, " ")
-	client := new(payload_domainsave)
+	client := new(payload_currsave)
 	if err := c.BodyParser(client); err != nil {
 		c.Status(fiber.StatusBadRequest)
 		return c.JSON(fiber.Map{
@@ -99,11 +97,10 @@ func DomainSave(c *fiber.Ctx) error {
 			"client_hostname": hostname,
 			"page":            client.Page,
 			"sdata":           client.Sdata,
-			"domain_id":       client.Domain_id,
-			"domain_name":     client.Domain_name,
-			"domain_status":   client.Domain_status,
+			"currency_id":     client.Currency_id,
+			"currency_name":   client.Currency_name,
 		}).
-		Post(PATH + "api/domainsave")
+		Post(PATH + "api/currsave")
 	if err != nil {
 		log.Println(err.Error())
 	}

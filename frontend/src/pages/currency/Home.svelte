@@ -14,38 +14,42 @@
 	export let listHome = []
 	export let totalrecord = 0
     let dispatch = createEventDispatcher();
-	let title_page = "DOMAIN"
+	let title_page = "CURRENCY"
     let sData = "";
     let myModal_newentry = "";
-    let domain_field = "";
-    let status_field = "";
+    let curr_flag = true;
+    let curr_field = "";
+    let create_field = "";
+    let update_field = "";
     let idrecord = "";
-    let searchDomain = "";
-    let filterDomain = [];
+    let searchCurrency = "";
+    let filterCurrency = [];
     let css_loader = "display: none;";
     let msgloader = "";
 
     $: {
-        if (searchDomain) {
-            filterDomain = listHome.filter(
+        if (searchCurrency) {
+            filterCurrency = listHome.filter(
                 (item) =>
-                    item.domain_name
+                    item.home_name
                         .toLowerCase()
-                        .includes(searchDomain.toLowerCase())
+                        .includes(searchCurrency.toLowerCase())
             );
         } else {
-            filterDomain = [...listHome];
+            filterCurrency = [...listHome];
         }
     }
     
-    const NewData = (e,id,domain,status) => {
+    const NewData = (e,id,curr,create,update) => {
         sData = e
         if(sData == "New"){
             clearField()
         }else{
-            idrecord = parseInt(id)
-            domain_field = domain;
-            status_field = status;
+            curr_flag = true;
+            idrecord = id
+            curr_field = curr;
+            create_field = create;
+            update_field = update;
         }
         myModal_newentry = new bootstrap.Modal(document.getElementById("modalentrycrud"));
         myModal_newentry.show();
@@ -60,33 +64,29 @@
         let flag = true
         let msg = ""
         if(sData == "New"){
-            if(domain_field == ""){
+            if(idrecord == ""){
                 flag = false
-                msg += "The Domain is required\n"
+                msg += "The ID is required\n"
             }
-            if(status_field == ""){
+            if(curr_field == ""){
                 flag = false
-                msg += "The Status is required\n"
+                msg += "The Currency is required\n"
             }
         }else{
             if(idrecord == ""){
                 flag = false
                 msg += "The ID is required\n"
             }
-            if(domain_field == ""){
+            if(curr_field == ""){
                 flag = false
-                msg += "The Domain is required\n"
-            }
-            if(status_field == ""){
-                flag = false
-                msg += "The Status is required\n"
+                msg += "The Currency is required\n"
             }
         }
         
         if(flag){
             css_loader = "display: inline-block;";
             msgloader = "Sending...";
-            const res = await fetch("/api/domainsave", {
+            const res = await fetch("/api/currsave", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -94,10 +94,9 @@
                 },
                 body: JSON.stringify({
                     sdata: sData,
-                    page:"DOMAIN-SAVE",
-                    domain_id: parseInt(idrecord),
-                    domain_name: domain_field,
-                    domain_status: status_field,
+                    page:"CURRENCY-SAVE",
+                    currency_id: idrecord,
+                    currency_name: curr_field,
                 }),
             });
             const json = await res.json();
@@ -121,9 +120,11 @@
     }
     
     function clearField(){
+        curr_flag = false;
         idrecord = "";
-        domain_field = "";
-        status_field = "";
+        curr_field = "";
+        create_field = "";
+        update_field = "";
     }
     function callFunction(event){
         switch(event.detail){
@@ -171,11 +172,11 @@
                 <slot:template slot="card-search">
                     <div class="col-lg-12" style="padding: 5px;">
                         <input
-                            bind:value={searchDomain}
+                            bind:value={searchCurrency}
                             on:keypress={handleKeyboard_checkenter}
                             type="text"
                             class="form-control"
-                            placeholder="Search Domain"
+                            placeholder="Search Currency"
                             aria-label="Search"/>
                     </div>
                 </slot:template>
@@ -185,28 +186,22 @@
                             <tr>
                                 <th NOWRAP width="1%" style="text-align: center;vertical-align: top;" >&nbsp;</th>
                                 <th NOWRAP width="1%" style="text-align: center;vertical-align: top;font-weight:bold;font-size:{table_header_font};">NO</th>
-                                <th NOWRAP width="1%" style="text-align: center;vertical-align: top;font-weight:bold;font-size:{table_header_font};">STATUS</th>
-                                <th NOWRAP width="*" style="text-align: left;vertical-align: top;font-weight:bold;font-size: {table_header_font};">DOMAIN</th>
+                                <th NOWRAP width="*" style="text-align: left;vertical-align: top;font-weight:bold;font-size: {table_header_font};">CURRENCY</th>
                             </tr>
                         </thead>
                         {#if totalrecord > 0}
                         <tbody>
-                            {#each filterDomain as rec }
+                            {#each filterCurrency as rec }
                                 <tr>
                                     <td NOWRAP style="text-align: center;vertical-align: top;cursor:pointer;">
                                         <i 
                                             on:click={() => {
-                                                NewData("Edit",rec.domain_id,rec.domain_name, rec.domain_status);
+                                                NewData("Edit",rec.home_id,rec.home_name,rec.home_create,rec.home_update);
                                             }} 
                                             class="bi bi-pencil"></i>
                                     </td>
-                                    <td NOWRAP style="text-align: center;vertical-align: top;font-size: {table_body_font};">{rec.domain_no}</td>
-                                    <td NOWRAP style="text-align: center;vertical-align: top;font-size: {table_body_font};">
-                                        <span style="padding: 5px;border-radius: 10px;padding-right:10px;padding-left:10px;{rec.domain_css}">
-                                            {rec.domain_status}
-                                        </span>
-                                    </td>
-                                    <td  style="text-align: left;vertical-align: top;font-size: {table_body_font};">{rec.domain_name}</td>
+                                    <td NOWRAP style="text-align: center;vertical-align: top;font-size: {table_body_font};">{rec.home_no}</td>
+                                    <td  style="text-align: left;vertical-align: top;font-size: {table_body_font};">{rec.home_id}</td>
                                 </tr>
                             {/each}
                         </tbody>
@@ -236,20 +231,29 @@
 	modal_footer={true}>
 	<slot:template slot="body">
         <div class="mb-3">
-            <label for="exampleForm" class="form-label">Domain</label>
+            <label for="exampleForm" class="form-label">ID</label>
             <Input
-                bind:value={domain_field}
+                bind:value={idrecord}
                 class="required"
                 type="text"
-                placeholder="Domain"/>
+                disabled='{curr_flag}'
+                placeholder="ID"/>
         </div>
         <div class="mb-3">
-            <label for="exampleForm" class="form-label">Status</label>
-            <select class="form-control required" bind:value="{status_field}">
-                <option value="RUNNING">RUNNING</option>
-                <option value="BANNED">BANNED</option>
-            </select>
+            <label for="exampleForm" class="form-label">Curr</label>
+            <Input
+                bind:value={curr_field}
+                class="required"
+                type="text"
+                placeholder="Currency"/>
         </div>
+        {#if sData == "Edit"}
+            <div class="alert alert-dark" role="alert" style="font-size:11px;padding:5px;">
+                Create : {create_field}
+                <br />
+                Update : {update_field}
+            </div>
+        {/if}
 	</slot:template>
 	<slot:template slot="footer">
         <Button

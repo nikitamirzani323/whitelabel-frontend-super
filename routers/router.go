@@ -106,8 +106,8 @@ func Init() *fiber.App {
 	app.Post("/api/slidersave", controllers.Slidersave)
 	app.Post("/api/sliderdelete", controllers.Sliderdelete)
 
-	app.Post("/api/domain", controllers.Domainhome)
-	app.Post("/api/domainsave", controllers.DomainSave)
+	app.Post("/api/curr", controllers.Currencyhome)
+	app.Post("/api/currsave", controllers.CurrencySave)
 
 	app.Post("/api/webagen", controllers.Websiteagenhome)
 	app.Post("/api/webagensave", controllers.Websiteagensave)

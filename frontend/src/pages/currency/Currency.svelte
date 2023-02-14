@@ -20,7 +20,7 @@
                 Authorization: "Bearer " + token,
             },
             body: JSON.stringify({
-                page: "DOMAIN-VIEW",
+                page: "ADMIN-VIEW",
             }),
         });
         const json = await res.json();
@@ -34,7 +34,7 @@
         }
     }
     async function initHome() {
-        const res = await fetch("/api/domain", {
+        const res = await fetch("/api/curr", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -50,24 +50,16 @@
             if (record != null) {
                 totalrecord = record.length;
                 let no = 0
-                let domain_css = "";
                 for (var i = 0; i < record.length; i++) {
                     no = no + 1;
-                    if(record[i]["domain_status"] == "RUNNING"){
-                        domain_css = "background:#FFEB3B;font-weight:bold;color:black;"
-                    }else{
-                        domain_css = "background:#E91E63;font-weight:bold;color:white;"
-                    }
                     listHome = [
                         ...listHome,
                         {
-                            domain_no: no,
-                            domain_id: record[i]["domain_id"],
-                            domain_name: record[i]["domain_name"],
-                            domain_status: record[i]["domain_status"],
-                            domain_css: domain_css,
-                            domain_create: record[i]["domain_create"],
-                            domain_update: record[i]["domain_update"],
+                            home_no: no,
+                            home_id: record[i]["currency_id"],
+                            home_name: record[i]["currency_name"],
+                            home_create: record[i]["currency_create"],
+                            home_update: record[i]["currency_update"],
                         },
                     ];
                 }
