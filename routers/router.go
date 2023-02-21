@@ -108,6 +108,9 @@ func Init() *fiber.App {
 
 	app.Post("/api/curr", controllers.Currencyhome)
 	app.Post("/api/currsave", controllers.CurrencySave)
+	app.Post("/api/catebank", controllers.Catebankhome)
+	app.Post("/api/catebanksave", controllers.CatebankSave)
+	app.Post("/api/banktype", controllers.BankTypehome)
 
 	app.Post("/api/webagen", controllers.Websiteagenhome)
 	app.Post("/api/webagensave", controllers.Websiteagensave)
@@ -139,9 +142,6 @@ func Init() *fiber.App {
 	app.Post("/api/prediksislotsave", controllers.GameslotSave)
 	app.Post("/api/prediksislotdelete", controllers.GameslotDelete)
 	app.Post("/api/prediksislotgenerator", controllers.GameslotGenerator)
-
-	app.Post("/api/banner", controllers.Bannerhome)
-	app.Post("/api/bannersave", controllers.BannerSave)
 
 	app.Post("/api/departement", controllers.Departementhome)
 	app.Post("/api/departementsave", controllers.DepartementSave)

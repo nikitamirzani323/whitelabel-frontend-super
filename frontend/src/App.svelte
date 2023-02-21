@@ -17,7 +17,7 @@
 	import Seriestrouble from "./pages/seriestrouble/Seriestrouble.svelte";
 	import Providerslot from "./pages/providerslot/Providerslot.svelte";
 	import Currency from "./pages/currency/Currency.svelte";
-	import Banner from "./pages/banner/Banner.svelte";
+	import Catebank from "./pages/catebank/Catebank.svelte";
 	import Album from "./pages/album/Album.svelte";
 	import Crm from "./pages/crm/Crm.svelte";
 	import Crmvalid from "./pages/crmvalid/Crmvalid.svelte";
@@ -80,8 +80,8 @@
 					table_body_font: table_body_font,
 				},
 			}),
-			"/banner": wrap({
-				component: Banner,
+			"/catebank": wrap({
+				component: Catebank,
 				props: {
 					table_header_font: table_header_font,
 					table_body_font: table_body_font,
