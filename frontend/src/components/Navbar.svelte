@@ -138,7 +138,6 @@
                             <li>
                                 <a class="dropdown-item" use:link href="/currency" style="font-size: 13px;">CURRENCY MANAGEMENT</a>
                                 <a class="dropdown-item" use:link href="/catebank" style="font-size: 13px;">CATEGORY BANK MANAGEMENT</a>
-                                <a class="dropdown-item" use:link href="/banktype" style="font-size: 13px;">BANK TYPE MANAGEMENT</a>
                                 <a class="dropdown-item" use:link href="/banner" style="font-size: 13px;">BANNER MANAGEMENT</a>
                                 <a class="dropdown-item" use:link href="/game" style="font-size: 13px;">GAME MANAGEMENT</a>
                                 <a class="dropdown-item" use:link href="/webagen" style="font-size: 13px;">WEBSITE MANAGEMENT</a>

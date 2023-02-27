@@ -26,6 +26,14 @@
     let catebank_id = 0;
     let catebank_name = "";
     let listbanktype = [];
+    let sDataBankType = "";
+    let idbanktype_flag = true;
+    let idbanktype_field = "";
+    let namebanktype_field = "";
+    let imgbanktype_field = "";
+    let statusbanktype_field = "";
+    let createbanktype_field = "";
+    let updatebanktype_field = "";
 
     let idrecord = "";
     let searchCatebank = "";
@@ -46,6 +54,17 @@
         } else {
             filterCatebank = [...listHome];
         }
+
+        if (searchBanktype) {
+            filterBanktype = listbanktype.filter(
+                (item) =>
+                    item.banktype_name
+                        .toLowerCase()
+                        .includes(searchBanktype.toLowerCase())
+            );
+        } else {
+            filterBanktype = [...listbanktype];
+        }
     }
     
     const NewData = (e,id,catebank,status,create,update) => {
@@ -64,24 +83,26 @@
         myModal_newentry.show();
         
     };
-    const ShowNewBankType = (e,idgame,prediksigame,nmgame,imggame,statusgame,creategame,updategame) => {
-        sDataPrediksi = e
+    const ShowNewBankType = (e,idbanktype,nmbanktype,imgbanktype,statusbanktype,createbanktype,updatebanktype) => {
+        
+        sDataBankType = e
         if(e == "Edit"){
-            prediksislot_id_field = idgame
-            prediksislot_prediksi_field = prediksigame
-            prediksislot_name_field = nmgame
-            prediksislot_image_field = imggame
-            prediksislot_status_field = statusgame
-            prediksislot_create_field = creategame
-            prediksislot_update_field = updategame
+            sDataBankType = e;
+            idbanktype_flag = true;
+            idbanktype_field = idbanktype;
+            namebanktype_field = nmbanktype;
+            imgbanktype_field = imgbanktype;
+            statusbanktype_field = statusbanktype;
+            createbanktype_field = createbanktype;
+            updatebanktype_field = updatebanktype;
         }else{
-            clearFieldGame();
+            clearFieldBankType();
         }
-        myModal_newentry = new bootstrap.Modal(document.getElementById("modalentrygame"));
+        myModal_newentry = new bootstrap.Modal(document.getElementById("modalcrudbanktype"));
         myModal_newentry.show();
     };
     const ShowBankType = (id,name) => {
-        // clearField()
+        clearFieldBankType()
         call_listbanktype(id)
      
         catebank_id = id
@@ -105,53 +126,30 @@
             },
             body: JSON.stringify({
                 page: "KELUARAN-view",
-                providerslot_id: e,
+                banktype_idcatebank: e,
             }),
         });
         const json = await res.json();
         if (json.status == 200) {
             let record = json.record;
             if (record != null) {
-                let prediksi_statuscss = "";
-                let prediksi_css = "";
-                let prediksi_css_color = "";
-                let prediksi_class = "";
+                let banktype_statuscss = "";
                 for (var i = 0; i < record.length; i++) {
-                    if(record[i]["prediksislot_status"] == "Y"){
-                        prediksi_statuscss = "background:#FFEB3B;font-weight:bold;color:black;"
+                    if(record[i]["banktype_status"] == "Y"){
+                        banktype_statuscss = "background:#FFEB3B;font-weight:bold;color:black;"
                     }else{
-                        prediksi_statuscss = "background:#E91E63;font-weight:bold;color:white;"
-                    }
-                    if(parseInt(record[i]["prediksislot_prediksi"]) > 9 && parseInt(record[i]["prediksislot_prediksi"]) < 50){
-                        prediksi_css = "color: #dc3545;"
-                        prediksi_css_color = "color: white;"
-                        prediksi_class = "bg-danger"
-                    }
-                    if(parseInt(record[i]["prediksislot_prediksi"]) > 49 && parseInt(record[i]["prediksislot_prediksi"]) < 71){
-                        prediksi_css = "color: #ffc107;"
-                        prediksi_css_color = "color: black;"
-                        prediksi_class = "bg-warning"
-                    }
-                    if(parseInt(record[i]["prediksislot_prediksi"]) > 70 && parseInt(record[i]["prediksislot_prediksi"]) < 101){
-                        prediksi_css = "color: #28a745;"
-                        prediksi_css_color = "color: white;"
-                        prediksi_class = "bg-success"
+                        banktype_statuscss = "background:#E91E63;font-weight:bold;color:white;"
                     }
                     listbanktype = [
                         ...listbanktype,
                         {
-                            prediksislot_id: record[i]["prediksislot_id"],
-                            prediksislot_nmprovider: record[i]["prediksislot_nmprovider"],
-                            prediksislot_name: record[i]["prediksislot_name"],
-                            prediksislot_prediksi: record[i]["prediksislot_prediksi"],
-                            prediksislot_prediksicss: prediksi_css,
-                            prediksislot_prediksicss_color: prediksi_css_color,
-                            prediksislot_prediksiclass: prediksi_class,
-                            prediksislot_image: record[i]["prediksislot_image"],
-                            prediksislot_status: record[i]["prediksislot_status"],
-                            prediksislot_statuscss: prediksi_statuscss,
-                            prediksislot_create: record[i]["prediksislot_create"],
-                            prediksislot_update: record[i]["prediksislot_update"],
+                            banktype_id: record[i]["banktype_id"],
+                            banktype_name: record[i]["banktype_name"],
+                            banktype_img: record[i]["banktype_img"],
+                            banktype_status: record[i]["banktype_status"],
+                            banktype_statuscss: banktype_statuscss,
+                            banktype_create: record[i]["banktype_create"],
+                            banktype_update: record[i]["banktype_update"],
                         },
                     ];
                 }
@@ -221,7 +219,83 @@
             alert(msg)
         }
     }
-    
+    async function handleSaveBankType() {
+        let flag = true
+        let msg = ""
+        if(sDataBankType == "New"){
+            if(idbanktype_field == ""){
+                flag = false
+                msg += "The ID is required\n"
+            }
+            if(namebanktype_field == ""){
+                flag = false
+                msg += "The Name is required\n"
+            }
+            if(imgbanktype_field == ""){
+                flag = false
+                msg += "The Image is required\n"
+            }
+            if(statusbanktype_field == ""){
+                flag = false
+                msg += "The Status is required\n"
+            }
+        }else{
+            if(idbanktype_field == ""){
+                flag = false
+                msg += "The ID is required\n"
+            }
+            if(namebanktype_field == ""){
+                flag = false
+                msg += "The Name is required\n"
+            }
+            if(imgbanktype_field == ""){
+                flag = false
+                msg += "The Image is required\n"
+            }
+            if(statusbanktype_field == ""){
+                flag = false
+                msg += "The Status is required\n"
+            }
+        }
+        
+        if(flag){
+            css_loader = "display: inline-block;";
+            msgloader = "Sending...";
+            const res = await fetch("/api/banktypesave", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: "Bearer " + token,
+                },
+                body: JSON.stringify({
+                    sdata: sDataBankType,
+                    page:"CURRENCY-SAVE",
+                    banktype_id: idbanktype_field,
+                    banktype_idcatebank: parseInt(catebank_id),
+                    banktype_name: namebanktype_field,
+                    banktype_img: imgbanktype_field,
+                    banktype_status: statusbanktype_field,
+                }),
+            });
+            const json = await res.json();
+            if (json.status == 200) {
+                if(sDataBankType=="New"){
+                    clearFieldBankType()
+                }
+                msgloader = json.message;
+                call_listbanktype(catebank_id)
+            } else if(json.status == 403){
+                alert(json.message)
+            } else {
+                msgloader = json.message;
+            }
+            setTimeout(function () {
+                css_loader = "display: none;";
+            }, 1000);
+        }else{
+            alert(msg)
+        }
+    }
     function clearField(){
         curr_flag = false;
         idrecord = "";
@@ -229,6 +303,16 @@
         status_field = "";
         create_field = "";
         update_field = "";
+    }
+    function clearFieldBankType(){
+        sDataBankType = "New";
+        idbanktype_flag = false;
+        idbanktype_field = "";
+        namebanktype_field = "";
+        imgbanktype_field = "";
+        statusbanktype_field = "";
+        createbanktype_field = "";
+        updatebanktype_field = "";
     }
     function callFunction(event){
         switch(event.detail){
@@ -260,6 +344,17 @@
             result = "SHOW"
         }
         return result
+    }
+    function uppercase(element) {
+        function onInput(event) {
+            element.value = element.value.toUpperCase();
+            }
+            element.addEventListener("input", onInput);
+            return {
+            destroy() {
+                element.removeEventListener("input", onInput);
+            },
+        };
     }
 </script>
 <div id="loader" style="margin-left:50%;{css_loader}">
@@ -416,10 +511,8 @@
         <tr>
           <th NOWRAP width="1%" style="text-align: center;vertical-align: top;font-weight:bold;font-size:{table_header_font};" colspan=2>&nbsp;</th>
           <th NOWRAP width="1%" style="text-align: center;vertical-align: top;font-weight:bold;font-size:{table_header_font};">STATUS</th>
-          <th NOWRAP width="20%" style="text-align: left;vertical-align: top;font-weight:bold;font-size:{table_header_font};">GAME</th>
+          <th NOWRAP width="*" style="text-align: left;vertical-align: top;font-weight:bold;font-size:{table_header_font};">NAME</th>
           <th NOWRAP width="10%" style="text-align: center;vertical-align: top;font-weight:bold;font-size:{table_header_font};">IMAGE</th>
-          <th NOWRAP width="*" style="text-align: right;vertical-align: top;font-weight:bold;font-size:{table_header_font};">PREDIKSI</th>
-        </tr>
       </thead>
       <tbody>
         {#each filterBanktype as rec}
@@ -427,28 +520,23 @@
             <td NOWRAP style="text-align: center;vertical-align: top;cursor:pointer;">
               <i
                 on:click={() => {
-                  handleDeleteGameSlot(rec.prediksislot_id,rec.prediksislot_prediksi);
+                  handleDeleteBankType(rec.banktype_id,rec.prediksislot_prediksi);
                 }}
                 class="bi bi-trash"/>
             </td>
             <td NOWRAP style="text-align: center;vertical-align: top;cursor:pointer;">
                 <i
                   on:click={() => {
-                    ShowNewGame("Edit",rec.prediksislot_id,rec.prediksislot_prediksi,rec.prediksislot_name,rec.prediksislot_image,rec.prediksislot_status,rec.prediksislot_create,rec.prediksislot_update);
+                    //idbanktype,nmbanktype,imgbanktype,statusbanktype,createbanktype,updatebanktype
+                    ShowNewBankType("Edit",rec.banktype_id,rec.banktype_name,rec.banktype_img,rec.banktype_status,
+                    rec.banktype_create,rec.banktype_update);
                   }}
                   class="bi bi-pencil"/>
               </td>
-            <td NOWRAP style="text-align: center;vertical-align: top;font-size: {table_body_font};{rec.prediksislot_statuscss}">{status(rec.prediksislot_status)}</td>
-            <td NOWRAP style="text-align: left;vertical-align: top;font-size: {table_body_font};">{rec.prediksislot_name}</td>
+            <td NOWRAP style="text-align: center;vertical-align: top;font-size: {table_body_font};{rec.banktype_statuscss}">{status(rec.banktype_status)}</td>
+            <td NOWRAP style="text-align: left;vertical-align: top;font-size: {table_body_font};">{rec.banktype_name}</td>
             <td NOWRAP style="text-align: center;vertical-align: top;font-size: {table_body_font};">
-                <img src="{rec.prediksislot_image}" width="40" alt="">
-            </td>
-            <td NOWRAP style="text-align: right;vertical-align: top;font-size: {table_body_font};">
-                <div class="progress">
-                    <div class="progress-bar progress-bar-striped {rec.prediksislot_prediksiclass}" role="progressbar" style="width: {rec.prediksislot_prediksi}%" aria-valuenow="{rec.prediksislot_prediksi}" aria-valuemin="0" aria-valuemax="100">
-                        <span style="{rec.prediksislot_prediksicss_color}">{rec.prediksislot_prediksi}%</span>
-                    </div>
-                </div>
+                <img src="{rec.banktype_img}" width="100" alt="">
             </td>
           </tr>
         {/each}
@@ -464,3 +552,63 @@
   </slot:template>
 </Modal>
 
+<Modal
+	modal_id="modalcrudbanktype"
+	modal_size="modal-dialog-centered"
+	modal_title="Bank Type"
+    modal_footer_css="padding:5px;"
+	modal_footer={true}>
+	<slot:template slot="body">
+        <div class="mb-3">
+            <label for="exampleForm" class="form-label">ID</label>
+            <input
+                use:uppercase
+                bind:value={idbanktype_field}
+                class="required form-control"
+                type="text"
+                maxlength="5"
+                disabled='{idbanktype_flag}'
+                placeholder="ID"/>
+        </div>
+        <div class="mb-3">
+            <label for="exampleForm" class="form-label">Name</label>
+            <input
+                use:uppercase
+                bind:value={namebanktype_field}
+                class="required form-control"
+                type="text"
+                placeholder="Name"/>
+        </div>
+        <div class="mb-3">
+            <label for="exampleForm" class="form-label">Link Image</label>
+            <Input
+                bind:value={imgbanktype_field}
+                class="required"
+                type="text"
+                placeholder="Link Image"/>
+        </div>
+        <div class="mb-3">
+            <label for="exampleForm" class="form-label">Status</label>
+            <select class="form-control required" bind:value="{statusbanktype_field}">
+                <option value="Y">SHOW</option>
+                <option value="N">HIDE</option>
+            </select>
+        </div>
+        {#if sData == "Edit"}
+            <div class="alert alert-dark" role="alert" style="font-size:11px;padding:5px;">
+                Create : {createbanktype_field}
+                <br />
+                Update : {updatebanktype_field}
+            </div>
+        {/if}
+	</slot:template>
+	<slot:template slot="footer">
+        <Button
+            on:click={() => {
+                handleSaveBankType();
+            }} 
+            button_function="SAVE"
+            button_title="Save"
+            button_css="btn-warning"/>
+	</slot:template>
+</Modal>
