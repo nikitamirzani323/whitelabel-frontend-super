@@ -112,6 +112,7 @@ func Init() *fiber.App {
 	app.Post("/api/catebanksave", controllers.CatebankSave)
 	app.Post("/api/banktype", controllers.BankTypehome)
 	app.Post("/api/banktypesave", controllers.BankTypehomeSave)
+	app.Post("/api/company", controllers.Companyhome)
 
 	app.Post("/api/webagen", controllers.Websiteagenhome)
 	app.Post("/api/webagensave", controllers.Websiteagensave)

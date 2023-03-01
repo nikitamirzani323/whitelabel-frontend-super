@@ -16,6 +16,7 @@
 	import Movietrouble from "./pages/movietrouble/Movietrouble.svelte";
 	import Seriestrouble from "./pages/seriestrouble/Seriestrouble.svelte";
 	import Providerslot from "./pages/providerslot/Providerslot.svelte";
+	import Company from "./pages/company/Company.svelte";
 	import Currency from "./pages/currency/Currency.svelte";
 	import Catebank from "./pages/catebank/Catebank.svelte";
 	import Album from "./pages/album/Album.svelte";
@@ -75,6 +76,13 @@
 			}),
 			"/employee": wrap({
 				component: Employee,
+				props: {
+					table_header_font: table_header_font,
+					table_body_font: table_body_font,
+				},
+			}),
+			"/company": wrap({
+				component: Company,
 				props: {
 					table_header_font: table_header_font,
 					table_body_font: table_body_font,
